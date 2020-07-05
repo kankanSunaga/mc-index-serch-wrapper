@@ -31,15 +31,12 @@ type musicScore struct {
 
 }
 
-type hoge struct {
-	Str string `json:"str"`
-}
-
 func main() {
 	l.Start(output)
 }
 
-func output() (hoge, error) {
+
+func output() {
 
 	fmt.Println("input 開始")
 	svc := lambda.New(session.New())
@@ -53,20 +50,25 @@ func output() (hoge, error) {
 	if err != nil {
 		log.Print(err)
 	}
+	fmt.Println("↓ExecutedVersion~~~~~~~~~~~~~~~~~~~")
+	fmt.Println(resp.ExecutedVersion)
+	fmt.Println("↓FunctionError~~~~~~~~~~~~~~~~~~~")
+	fmt.Println(resp.FunctionError)
+	fmt.Println("↓StatusCode~~~~~~~~~~~~~~~~~~~")
+	fmt.Println(resp.StatusCode)
+	fmt.Println("↓LogResult~~~~~~~~~~~~~~~~~~~")
 	fmt.Println(resp.LogResult)
+	fmt.Println("↓Payload~~~~~~~~~~~~~~~~~~~")
+	fmt.Println(string(resp.Payload))
+	fmt.Println("~~~~~~~~~~~~~~~~~~~~~end")
 
-	var hoges hoge
-	json.Unmarshal(resp.Payload, &hoges)
-	fmt.Println(hoges)
-	return hoges, err
-
-	//var mcs []*musicScore
-	//if err := json.Unmarshal(resp.Payload, &mcs); err != nil {
-	//	log.Fatal(err)
-	//}
-	//for _, mc := range mcs {
-	//	fmt.Printf("id: %v, title: %v, completed: %v\n", mc.Id, mc.MusicName, mc.Difficulty)
-	//}
+	var mcs []*musicScore
+	if err := json.Unmarshal(resp.Payload, &mcs); err != nil {
+		log.Fatal(err)
+	}
+	for _, mc := range mcs {
+		fmt.Printf("id: %v, title: %v, completed: %v\n", mc.Id, mc.MusicName, mc.Difficulty)
+	}
 
 	//x, n := binary.Varint(resp.Payload)
 	//if n != len(resp.Payload) {
