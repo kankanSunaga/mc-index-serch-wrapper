@@ -31,19 +31,22 @@ type musicScore struct {
 
 }
 
+type hoge struct {
+	Str string `json:"str"`
+}
+
 func main() {
 	l.Start(output)
 }
 
-
-func output() {
+func output() (hoge, error) {
 
 	fmt.Println("input 開始")
 	svc := lambda.New(session.New())
 	abc := requestParam{"altoSaxophone", "紅蓮"}
 	jsonBytes, _ := json.Marshal(abc)
 	input := &lambda.InvokeInput{
-		FunctionName:   aws.String(os.Getenv("TERGET_ARN")),
+		FunctionName:   aws.String(os.Getenv("TARGET_ARN")),
 		Payload:        jsonBytes,
 	}
 	resp, err := svc.Invoke(input)
@@ -52,15 +55,18 @@ func output() {
 	}
 	fmt.Println(resp.LogResult)
 
+	var hoges hoge
+	json.Unmarshal(resp.Payload, &hoges)
+	fmt.Println(hoges)
+	return hoges, err
 
-
-	var mcs []*musicScore
-	if err := json.Unmarshal(resp.Payload, &mcs); err != nil {
-		log.Fatal(err)
-	}
-	for _, mc := range mcs {
-		fmt.Printf("id: %v, title: %v, completed: %v\n", mc.Id, mc.MusicName, mc.Difficulty)
-	}
+	//var mcs []*musicScore
+	//if err := json.Unmarshal(resp.Payload, &mcs); err != nil {
+	//	log.Fatal(err)
+	//}
+	//for _, mc := range mcs {
+	//	fmt.Printf("id: %v, title: %v, completed: %v\n", mc.Id, mc.MusicName, mc.Difficulty)
+	//}
 
 	//x, n := binary.Varint(resp.Payload)
 	//if n != len(resp.Payload) {
