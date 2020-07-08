@@ -17,10 +17,6 @@ type requestParam struct {
 	musicName  string `json:"musicName"`
 }
 
-type Hoge struct {
-	Val string `json:"val"`
-}
-
 type MusicScore struct {
 	Id			int    `json:"id"`
 	ServiceName string `json:"serviceName"`
@@ -40,7 +36,7 @@ func main() {
 }
 
 
-func output() (Hoge, error) {
+func output() (MusicScore, error) {
 
 	fmt.Println("input 開始")
 	svc := lambda.New(session.New())
@@ -67,12 +63,12 @@ func output() (Hoge, error) {
 	fmt.Println(string(resp.Payload))
 	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end")
 
-	var hoge Hoge
-	if err := json.Unmarshal(resp.Payload, &hoge); err != nil {
+	var mc MusicScore
+	if err := json.Unmarshal(resp.Payload, &mc); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf(hoge.Val)
-	return hoge, err
+	fmt.Printf(mc.MusicName)
+	return mc, err
 
 	//x, n := binary.Varint(resp.Payload)
 	//if n != len(resp.Payload) {
