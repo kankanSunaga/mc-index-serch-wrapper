@@ -17,7 +17,7 @@ type requestParam struct {
 	musicName  string `json:"musicName"`
 }
 
-type musicScore struct {
+type MusicScore struct {
 	Id			int    `json:"id"`
 	ServiceName string `json:"serviceName"`
 	MusicName   string `json:"musicName"`
@@ -50,25 +50,24 @@ func output() {
 	if err != nil {
 		log.Print(err)
 	}
+	fmt.Println(resp)
 	fmt.Println("↓ExecutedVersion~~~~~~~~~~~~~~~~~~~")
 	fmt.Println(resp.ExecutedVersion)
-	fmt.Println("↓FunctionError~~~~~~~~~~~~~~~~~~~")
+	fmt.Println("↓FunctionError~~~~~~~~~~~~~~~~~~~~~")
 	fmt.Println(resp.FunctionError)
-	fmt.Println("↓StatusCode~~~~~~~~~~~~~~~~~~~")
+	fmt.Println("↓StatusCode~~~~~~~~~~~~~~~~~~~~~~~~")
 	fmt.Println(resp.StatusCode)
-	fmt.Println("↓LogResult~~~~~~~~~~~~~~~~~~~")
+	fmt.Println("↓LogResult~~~~~~~~~~~~~~~~~~~~~~~~~")
 	fmt.Println(resp.LogResult)
-	fmt.Println("↓Payload~~~~~~~~~~~~~~~~~~~")
+	fmt.Println("↓Payload~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 	fmt.Println(string(resp.Payload))
-	fmt.Println("~~~~~~~~~~~~~~~~~~~~~end")
+	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end")
 
-	var mcs []*musicScore
+	var mcs MusicScore
 	if err := json.Unmarshal(resp.Payload, &mcs); err != nil {
 		log.Fatal(err)
 	}
-	for _, mc := range mcs {
-		fmt.Printf("id: %v, title: %v, completed: %v\n", mc.Id, mc.MusicName, mc.Difficulty)
-	}
+	fmt.Printf("id: %v, title: %v, completed: %v\n", mcs.Id, mcs.MusicName, mcs.Difficulty)
 
 	//x, n := binary.Varint(resp.Payload)
 	//if n != len(resp.Payload) {
